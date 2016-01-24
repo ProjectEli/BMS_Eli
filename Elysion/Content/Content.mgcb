@@ -19,3 +19,9 @@
 /processorParam:Quality=Best
 /build:Sound/s1.wav
 
+#begin SampleBMS/2F7.ogg
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SampleBMS/2F7.ogg
+

@@ -58,9 +58,10 @@ namespace Elysion
             string 그림패턴 = @"#BMP\S+\s+.+\n\r?";
             string 노트패턴 = @"#\d{5}:.+\n\r?";
             //string pattern = @"^#\S+\s+.+"; // # nonwhite white nonwhite 순서. @은 regexp용
+            GC.Collect();
 
             // 읽기
-            StreamReader sr = new StreamReader("Content/SampleBMS/sample.bme");
+            StreamReader sr = new StreamReader("Content/SampleBMS/EliSample.bms");
             try { s = sr.ReadToEnd(); }
             catch { return false; }
             finally { sr.Close(); }
@@ -103,7 +104,6 @@ namespace Elysion
                     else { return false; }
                 }
             }
-
             return true;
 
         }

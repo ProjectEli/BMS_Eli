@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System.Media;
 
 using System;
 
@@ -17,16 +17,19 @@ namespace Elysion
     public class GameMgr : Game
     {
         GraphicsDeviceManager graphics;
-        List<SoundEffect> soundEffects;
+        List<SoundPlayer> sounds;
         SpriteBatch spriteBatch;
         KeyboardState oldstate;
         KeyboardState currentstate;
         BMSReader rd;
+        SoundMgr sdmgr;
 
         public GameMgr()
         {
             graphics = new GraphicsDeviceManager(this);
-            soundEffects = new List<SoundEffect>();
+            //soundEffects = new List<SoundEffect>();
+            sdmgr = new SoundMgr();
+            sounds = new List<SoundPlayer>();
             Content.RootDirectory = "Content";
             rd = new BMSReader();
         }
@@ -53,8 +56,8 @@ namespace Elysion
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            
-            soundEffects.Add(Content.Load<SoundEffect>("Sound/s1"));
+            sounds.Add(new SoundPlayer(@"./Content/Sound/s1.wav"));
+            sounds.Add(new SoundPlayer(@"./Content/SampleBMS/1A#6.wav"));
         }
 
         /// <summary>
@@ -83,14 +86,21 @@ namespace Elysion
             {
                 if (currentstate.IsKeyDown(Keys.A) && !oldstate.IsKeyDown(Keys.A))
                 {
-                    var sd = soundEffects[0].CreateInstance();
+                    sounds[0].Play();
+                    //var sd = soundEffects[0].CreateInstance();
                     //sd.IsLooped = false;
-                    sd.Play();
+                    //sd.Play();
                     //sd.Dispose();
                 }
                 if (currentstate.IsKeyDown(Keys.R) && !oldstate.IsKeyDown(Keys.R)) { rd.BMS파일분석(); }
                 if (currentstate.IsKeyDown(Keys.Y) && !oldstate.IsKeyDown(Keys.Y)) { rd.노트시간계산(); }
-                
+                if (currentstate.IsKeyDown(Keys.S) && !oldstate.IsKeyDown(Keys.S))
+                {
+                    sdmgr.Play();
+                    //var sd = soundEffects[1].CreateInstance();
+                    //sd.Play();
+                }
+
                 oldstate = currentstate;
             }
             
