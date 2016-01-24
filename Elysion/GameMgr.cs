@@ -4,8 +4,6 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
-using System.IO;
-using System.Text.RegularExpressions;
 using System;
 
 namespace Elysion
@@ -14,50 +12,6 @@ namespace Elysion
     /// This is the main type for your game.
     /// </summary>
     /// 
-
-    // BMS를 읽어들인다.
-    public class BMSReader
-    {
-        private List<string> lines;
-        private int 인덱스;
-
-        public BMSReader()
-        {
-            인덱스 = 0;
-            lines = new List<string>();
-        }
-
-        public bool ReadnParse()
-        {
-            StreamReader sr = new StreamReader("Content/SampleBMS/sample.bme");
-            //string headerpattern = @"^#\S+\s+\S+";
-            try
-            {
-                do
-                {
-                    this.lines.Add(sr.ReadLine());
-                }
-                while (sr.Peek() != -1);
-            }
-            catch
-            {
-                this.lines.Add("빈 파일");
-                return false;
-            }
-            finally
-            {
-                인덱스 = 0;
-                sr.Close();
-            }
-            return true;
-        }
-
-        public string GetLine()
-        {
-            if (인덱스 >= lines.Count) { return "파일이 이미 끝났습니다."; }
-            else { return lines[인덱스++]; }
-        }    
-    }
 
     // 메인 구성
     public class GameMgr : Game
@@ -134,8 +88,8 @@ namespace Elysion
                     sd.Play();
                     //sd.Dispose();
                 }
-                if (currentstate.IsKeyDown(Keys.R) && !oldstate.IsKeyDown(Keys.R)) { rd.ReadnParse(); }
-                if (currentstate.IsKeyDown(Keys.S) && !oldstate.IsKeyDown(Keys.S)) { Console.WriteLine(rd.GetLine()); }
+                if (currentstate.IsKeyDown(Keys.R) && !oldstate.IsKeyDown(Keys.R)) { rd.BMS파일분석(); }
+                if (currentstate.IsKeyDown(Keys.Y) && !oldstate.IsKeyDown(Keys.Y)) { rd.노트시간계산(); }
                 
                 oldstate = currentstate;
             }
