@@ -93,7 +93,7 @@ namespace Elysion
                     //sd.Dispose();
                 }
                 if (currentstate.IsKeyDown(Keys.R) && !oldstate.IsKeyDown(Keys.R)) { rd.BMS파일분석(); }
-                if (currentstate.IsKeyDown(Keys.Y) && !oldstate.IsKeyDown(Keys.Y)) { rd.노트시간계산(); }
+                if (currentstate.IsKeyDown(Keys.Y) && !oldstate.IsKeyDown(Keys.Y)) { rd.노트시간계산();sdmgr.시간들 = rd.시간들; }
                 if (currentstate.IsKeyDown(Keys.S) && !oldstate.IsKeyDown(Keys.S))
                 {
                     sdmgr.Play();

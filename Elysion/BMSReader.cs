@@ -13,7 +13,7 @@ namespace Elysion
         public List<int> 위치들;
         public List<string> 노트들;
         public List<int> 마디들;
-        public List<int> 시간들; // in ms
+        public Dictionary<int,List<string>> 시간들; // in ms
         public int 플레이어;
         public string 장르;
         public string 제목;
@@ -47,6 +47,7 @@ namespace Elysion
             배너그림 = "";
             소리들 = new Dictionary<string, string>();
             그림들 = new Dictionary<string, string>();
+            시간들 = new Dictionary<int, List<string>>();
             마디들 = new List<int>();
             위치들 = new List<int>();
             노트들 = new List<string>();
@@ -98,6 +99,7 @@ namespace Elysion
                 if (s.Substring(7).TrimEnd() != "00") // 존재하는 노트만
                 {
                     노트들.Add(s.Substring(7).TrimEnd());
+                    //Console.WriteLine(s.Substring(7).TrimEnd());
                     if (Int32.TryParse(s.Substring(1, 3), out k)) { 마디들.Add(k); }
                     else { return false; }
                     if (Int32.TryParse(s.Substring(4, 2), out k)) { 위치들.Add(k); }
@@ -111,16 +113,42 @@ namespace Elysion
 
         public bool 노트시간계산()
         {
-            Double t = 0;
-            if (노트들.Count == 0) { return false; }
-            else
+            // 생각 : 시간 : str list (음원이름 적힌 list)
+            // 시간은 그냥 32비트 순서대로 한다.
+            //Double t = 0;
+            //Double dt = 3600.0 / (BPM * 8);
+            List<string> soundlist;
+            string soundfile;
+            string note;
+            int division = 32; // 마디하나에 갯수
+
+            // 시간 list 생성
+            int endnode = 마디들[마디들.Count - 1];
+            for (int i = 0; i < endnode; i++)
             {
-                for (int i =0; i<마디들.Count; i++)
+                for (int k = 0; k<division; k++)
                 {
-                    
+                    시간들.Add(i * division + k, new List<string>());
                 }
-                return true;
             }
+
+            for (int i = 0; i<마디들.Count; i++)
+            {
+                int nodelength = 노트들[i].Length;
+
+                for (int k= 0; k<nodelength; k+=2)
+                {
+                    note = 노트들[i].Substring(k, 2);
+                    if (note != "00")
+                    {
+                        소리들.TryGetValue(노트들[i].Substring(k, 2), out soundfile);
+                        시간들.TryGetValue((마디들[i]-1) * division + k*division/nodelength, out soundlist);
+                        soundlist.Add(soundfile);
+                    }
+                }
+            }
+            Console.WriteLine("분석완료");
+            return true;
         }
     }
 }
